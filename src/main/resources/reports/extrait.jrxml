@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="extait" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e1b7dd67-6726-439a-ab6d-57a8769e5776">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="nom" class="java.lang.String"/>
+	<parameter name="numCompte" class="java.lang.String"/>
+	<parameter name="prenom" class="java.lang.String"/>
+	<parameter name="email" class="java.lang.String"/>
+	<parameter name="adresse" class="java.lang.String"/>
+	<field name="typeMouvement" class="java.lang.String"/>
+	<field name="somme" class="java.lang.String"/>
+	<field name="solde" class="java.lang.String"/>
+	<field name="date" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="166" splitType="Stretch">
+			<staticText>
+				<reportElement x="98" y="13" width="261" height="31" uuid="f48cda62-318a-4bf7-84e9-541b34bafa2a"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Extrait Compte Bancaire]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="297" y="47" width="258" height="119" forecolor="#E0E0E0" backcolor="#E0E0E0" uuid="ab6cd6c1-f031-4522-8705-e342e24de220"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="309" y="89" width="100" height="20" uuid="555cd5fa-5fa9-454c-9579-936ad36d92f7"/>
+				<text><![CDATA[Adresse]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="309" y="109" width="100" height="20" uuid="efe22592-b1a2-47b8-985a-37de77e7e1b5"/>
+				<text><![CDATA[Numéro de Compte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="309" y="129" width="100" height="20" uuid="1e50fade-0731-49ba-81b4-128bcdadc303"/>
+				<text><![CDATA[Email]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="309" y="69" width="100" height="20" uuid="62f0805b-ba59-4c6c-8192-9e0e1e204511"/>
+				<text><![CDATA[Nom de Client]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="409" y="69" width="100" height="20" uuid="d8dafc85-1d8d-45f6-b91b-b4a03c0d8fe1"/>
+				<textFieldExpression><![CDATA[$P{nom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="109" width="100" height="20" uuid="19eb4e07-7868-4390-84bc-23f46bd92b54"/>
+				<textFieldExpression><![CDATA[$P{numCompte}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="474" y="69" width="81" height="20" uuid="81d7a1cd-dd0a-4395-8861-12d298489d8a"/>
+				<textFieldExpression><![CDATA[$P{prenom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="129" width="100" height="20" uuid="f814887c-6801-4d23-8a92-6375ebc69fb9"/>
+				<textFieldExpression><![CDATA[$P{email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="89" width="100" height="20" uuid="529c2ad4-1e51-492b-a57f-b26de8ed2f7d"/>
+				<textFieldExpression><![CDATA[$P{adresse}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement x="10" y="20" width="221" height="20" uuid="bfe24c05-78cb-4e10-aee7-1ad3a8574fcc"/>
+				<textElement>
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Merci de choisir nos services.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="0" width="133" height="20" uuid="251b151a-ea8d-482f-b04b-a7abf635beb2"/>
+				<textElement>
+					<font fontName="Georgia" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Infos additionnelles]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="12" width="158" height="20" backcolor="#CCCCCC" uuid="456bcc27-3a92-4bb8-95a3-f5700296bd4e"/>
+				<box>
+					<pen lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</box>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="158" y="12" width="165" height="20" backcolor="#CCCCCC" uuid="b4e81ea3-b62c-49fc-ba6f-2e76d541aa0a"/>
+				<box>
+					<pen lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</box>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Type de mouvement]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="433" y="12" width="122" height="20" backcolor="#CCCCCC" uuid="2c1a2102-7f38-4fc8-af1f-17bec167b3a3"/>
+				<box>
+					<pen lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</box>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Solde]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="323" y="12" width="110" height="20" backcolor="#CCCCCC" uuid="825eb61f-f4eb-49dc-a770-21d905e1c802"/>
+				<box>
+					<pen lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</box>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Somme]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<textField>
+				<reportElement x="158" y="0" width="165" height="20" uuid="937177b7-e973-4d93-ae38-f448cfb17caf"/>
+				<textFieldExpression><![CDATA[$F{typeMouvement}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="323" y="0" width="110" height="20" uuid="e79d8496-d8f0-484f-985a-5fd946607c93"/>
+				<textFieldExpression><![CDATA[$F{somme}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="433" y="0" width="122" height="20" uuid="9f529564-39c0-4f56-aea9-4ff062e5a146"/>
+				<textFieldExpression><![CDATA[$F{solde}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="158" height="20" uuid="7f0d85e5-2380-47fe-9dd7-a0d6840a02f0"/>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="175" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="64" splitType="Stretch">
+			<staticText>
+				<reportElement x="12" y="10" width="217" height="20" uuid="e5648987-0136-41f2-95cd-170f9d98e1ee"/>
+				<text><![CDATA[En votre aimable règlement,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="30" width="100" height="20" uuid="b5ef74da-4c0f-42b4-b592-c83b1d2553a5"/>
+				<text><![CDATA[Cordialement,]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
