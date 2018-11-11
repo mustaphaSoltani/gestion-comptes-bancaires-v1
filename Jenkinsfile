@@ -10,7 +10,7 @@ node{
     }
     stage('Build') {
  try {
-         sh 'mvn clean install -DskipTest'
+         sh 'mvn clean install -DskipTests'
 } finally {
            // step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
 
