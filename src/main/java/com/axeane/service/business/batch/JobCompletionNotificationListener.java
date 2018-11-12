@@ -1,4 +1,4 @@
-package com.axeane.service.batch;
+package com.axeane.service.business.batch;
 
 import com.axeane.domain.Client;
 import org.slf4j.Logger;
@@ -24,12 +24,12 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
 
     @Override
     public void afterJob(JobExecution jobExecution) {
-        if(jobExecution.getStatus() == BatchStatus.COMPLETED) {
+        if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
             log.info("!!! JOB FINISHED! Time to verify the results");
 
             jdbcTemplate.query("SELECT cin,nom,prenom,adresse,email,num_tel FROM ax_client*",
-                    (rs, row) -> new Client(rs.getString(1),rs.getString(2),rs.getString(3),
-                            rs.getString(4),rs.getString(5),rs.getString(6))
+                    (rs, row) -> new Client(rs.getString(1), rs.getString(2), rs.getString(3),
+                            rs.getString(4), rs.getString(5), rs.getString(6))
             ).forEach(client -> log.info("Found <" + client + "> in the database."));
         }
     }

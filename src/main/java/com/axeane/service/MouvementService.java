@@ -44,8 +44,8 @@ public class MouvementService {
 
     @Transactional(readOnly = true)
     public List<Mouvement> findAllMouvementByCompte(Integer numC) {// get mouvement by compte
-        log.debug("Request to get all Mouvements for Compte n°:",numC);
-        Compte compte=compteRepository.findByNumCompte(numC);
+        log.debug("Request to get all Mouvements for Compte n°:", numC);
+        Compte compte = compteRepository.findByNumCompte(numC);
         return mouvementRepository.findAllByCompte(compte);
     }
 

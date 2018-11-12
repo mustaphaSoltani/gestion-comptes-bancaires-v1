@@ -1,21 +1,17 @@
-package com.axeane.service.testH2;
+package com.axeane.service;
 
 import com.axeane.GestionCompteBancaireApplication;
-import com.axeane.domain.Client;
 import com.axeane.domain.Compte;
 import com.axeane.domain.Mouvement;
 import com.axeane.domain.enumuration.TypeMouvementEnum;
-import com.axeane.repository.ClientRepository;
 import com.axeane.repository.CompteRepository;
 import com.axeane.repository.MouvementRepository;
-import com.axeane.service.MouvementService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -51,7 +47,7 @@ public class MouvementServiceTest {
         compteRepository.saveAndFlush(compte1);
         mouvement1.setCompteId(compte1.getId());
         mouvement1.setSomme(new BigDecimal(10400));
-        mouvement1.setDate(new Date(13/12/2018));
+        mouvement1.setDate(new Date(2019, 10, 10));
         mouvement1.setTypeMouvement(TypeMouvementEnum.RETRAIT);
 
         mouvementService.saveMouvement(mouvement1);
@@ -69,7 +65,7 @@ public class MouvementServiceTest {
         mouvement.setCompteId(compte2.getId());
         mouvement.setSomme(new BigDecimal(10000));
         mouvement.setTypeMouvement(TypeMouvementEnum.RETRAIT);
-        mouvement.setDate(new Date(13/12/2018));
+        mouvement.setDate(new Date(2019, 10, 10));
         mouvementService.saveMouvement(mouvement);
         List<Mouvement> listMouvementAfterSave = mouvementService.findAllMouvementByCompte(456);
         Mouvement mouvementtSaved = mouvementService.getMouvementById(listMouvementAfterSave.get(listMouvementAfterSave.size() - 1).getId());
@@ -85,7 +81,7 @@ public class MouvementServiceTest {
         compteRepository.saveAndFlush(compte3);
         Mouvement mouvement = new Mouvement();
         mouvement.setCompteId(compte3.getId());
-        mouvement.setDate(new Date(13/12/2018));
+        mouvement.setDate(new Date(2019, 10, 10));
         mouvement.setSomme(new BigDecimal(1000));
         mouvement.setTypeMouvement(TypeMouvementEnum.RETRAIT);
 
@@ -97,7 +93,7 @@ public class MouvementServiceTest {
         } catch (Exception e) {
             throwException = true;
         }
-        assertThat(listMouvementAfterSave.size(), is(sizeListMouvementBeforeSave ));
+        assertThat(listMouvementAfterSave.size(), is(sizeListMouvementBeforeSave));
         assertThat(throwException, is(false));
     }
 
@@ -111,7 +107,7 @@ public class MouvementServiceTest {
         mouvement.setCompteId(compte4.getId());
         mouvement.setSomme(new BigDecimal(1000));
         mouvement.setTypeMouvement(TypeMouvementEnum.RETRAIT);
-        mouvement.setDate(new Date(13/12/2018));
+        mouvement.setDate(new Date(2019, 10, 10));
         mouvementService.saveMouvement(mouvement);
         Mouvement mouvement1 = mouvementService.findAllMouvementByCompte(214).get(mouvementService.findAllMouvementByCompte(214).size() - 1);
         mouvementService.delete(mouvement1.getId());
@@ -126,6 +122,7 @@ public class MouvementServiceTest {
         compte3.setNumCompte(521);
         compteRepository.saveAndFlush(compte3);
         Mouvement mouvement = new Mouvement();
+        mouvement.setDate(new Date(2019, 10, 10));
         mouvement.setCompteId(null);
         List<Mouvement> listMouvementAfterSave = new ArrayList<>();
         boolean throwException = false;
@@ -136,7 +133,7 @@ public class MouvementServiceTest {
         } catch (Exception e) {
             throwException = true;
         }
-        assertThat(listMouvementAfterSave.size(), is(sizeListMouvemntBeforeSave ));
+        assertThat(listMouvementAfterSave.size(), is(sizeListMouvemntBeforeSave));
         assertThat(throwException, is(true));
     }
 }

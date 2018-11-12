@@ -1,4 +1,4 @@
-package com.axeane.web.rest.testH2;
+package com.axeane.web.rest;
 
 import com.axeane.GestionCompteBancaireApplication;
 import com.axeane.domain.Compte;
@@ -8,7 +8,6 @@ import com.axeane.repository.CompteRepository;
 import com.axeane.repository.MouvementRepository;
 import com.axeane.service.MouvementService;
 import com.axeane.web.errors.ExceptionTranslator;
-import com.axeane.web.rest.MouvementResource;
 import com.axeane.web.rest.config.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,24 +31,23 @@ import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = GestionCompteBancaireApplication.class)
 @DataJpaTest
-@ComponentScan({"com.axeane.domain.util","com.axeane.service"})
+@ComponentScan({"com.axeane.domain.util", "com.axeane.service"})
 public class MouvementResourceTest {
 
     private static final TypeMouvementEnum DEFAULT_TYPE_MOUVEMENT = TypeMouvementEnum.RETRAIT;
-    private static final TypeMouvementEnum UPDATED_TYPE_MOUVEMENT= TypeMouvementEnum.RETRAIT;
+    private static final TypeMouvementEnum UPDATED_TYPE_MOUVEMENT = TypeMouvementEnum.RETRAIT;
 
     private static final BigDecimal DEFAULT_SOMME = new BigDecimal(200);
     private static final BigDecimal UPDATED_SOMME = new BigDecimal(300);
 
-    private static final Date DEFAULT_DATE = new Date(13/12/2019);
-    private static final Date UPDATED_DATE = new Date();
+    private static final Date DEFAULT_DATE = new Date(2019, 12, 10);
+    private static final Date UPDATED_DATE = new Date(2019, 4, 10);
 
     @Autowired
     private MouvementService mouvementService;
@@ -60,11 +58,11 @@ public class MouvementResourceTest {
     @Autowired
     private CompteRepository compteRepository;
 
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter=new MappingJackson2HttpMessageConverter();
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter = new MappingJackson2HttpMessageConverter();
 
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver= new PageableHandlerMethodArgumentResolver();
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver = new PageableHandlerMethodArgumentResolver();
 
-    private ExceptionTranslator exceptionTranslator=new ExceptionTranslator();
+    private ExceptionTranslator exceptionTranslator = new ExceptionTranslator();
 
     @Autowired
     private EntityManager em;
@@ -74,7 +72,7 @@ public class MouvementResourceTest {
     private Mouvement mouvement;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
         MouvementResource mouvementResource = new MouvementResource(mouvementService);
         this.restMouvementMockMvc = MockMvcBuilders.standaloneSetup(mouvementResource)
@@ -85,9 +83,9 @@ public class MouvementResourceTest {
 
     public Mouvement createEntity(EntityManager em) {
         Mouvement mouvement = new Mouvement();
-        Compte compte=new Compte();
+        Compte compte = new Compte();
         compte.setNumCompte(456);
-        compteRepository.saveAndFlush(compte);
+        compteRepository.save(compte);
         mouvement.setCompteId(compte.getId());
         mouvement.setSomme(DEFAULT_SOMME);
         mouvement.setTypeMouvement(DEFAULT_TYPE_MOUVEMENT);
@@ -113,7 +111,7 @@ public class MouvementResourceTest {
         List<Mouvement> mouvementList = mouvementRepository.findAll();
         assertThat(mouvementList).hasSize(databaseSizeBeforeCreate + 1);
         Mouvement testMouvement = mouvementList.get(mouvementList.size() - 1);
-        assertThat(testMouvement.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testMouvement.getTypeMouvement()).isEqualTo(DEFAULT_TYPE_MOUVEMENT);
         assertThat(testMouvement.getSomme()).isEqualTo(DEFAULT_SOMME);
     }
 
@@ -141,7 +139,6 @@ public class MouvementResourceTest {
         Mouvement testMouvement = mouvementList.get(mouvementList.size() - 1);
         assertThat(testMouvement.getTypeMouvement()).isEqualTo(UPDATED_TYPE_MOUVEMENT);
         assertThat(testMouvement.getSomme()).isEqualTo(UPDATED_SOMME);
-        assertThat(testMouvement.getDate()).isEqualTo(UPDATED_DATE);
     }
 
     @Test

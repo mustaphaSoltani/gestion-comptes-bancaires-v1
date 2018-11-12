@@ -1,4 +1,4 @@
-package com.axeane.service.testH2;
+package com.axeane.service;
 
 import com.axeane.GestionCompteBancaireApplication;
 import com.axeane.domain.Client;

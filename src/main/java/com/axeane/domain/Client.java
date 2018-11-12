@@ -64,7 +64,7 @@ public class Client implements Serializable {
         return serialVersionUID;
     }
 
-    public Client( String cin,String nom, String prenom, String adresse, String email, String numTel, Set<Compte> comptes) {
+    public Client(String cin, String nom, String prenom, String adresse, String email, String numTel, Set<Compte> comptes) {
         this.cin = cin;
         this.nom = nom;
         this.prenom = prenom;
@@ -73,7 +73,8 @@ public class Client implements Serializable {
         this.numTel = numTel;
         this.comptes = comptes;
     }
-    public Client( String cin,String nom, String prenom, String adresse, String email, String numTel) {
+
+    public Client(String cin, String nom, String prenom, String adresse, String email, String numTel) {
         this.cin = cin;
         this.nom = nom;
         this.prenom = prenom;

@@ -1,7 +1,6 @@
 package com.axeane.web.rest;
 
 import com.axeane.domain.Client;
-import com.axeane.domain.Mail;
 import com.axeane.domain.Views;
 import com.axeane.domain.util.ResponseUtil;
 import com.axeane.service.ClientService;
@@ -9,8 +8,6 @@ import com.axeane.service.business.ExtraitCompteBancaireService;
 import com.axeane.service.business.MailExtraitService;
 import com.axeane.web.util.HeaderUtil;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.resource.Contact;
 import net.sf.jasperreports.engine.JRException;
 import org.json.JSONArray;

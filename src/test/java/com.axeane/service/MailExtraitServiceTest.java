@@ -1,7 +1,6 @@
-package com.axeane.service.testH2;
+package com.axeane.service;
 
 import com.axeane.GestionCompteBancaireApplication;
-import com.axeane.domain.Mail;
 import com.axeane.service.business.MailExtraitService;
 import com.mailjet.client.ClientOptions;
 import com.mailjet.client.MailjetClient;
@@ -13,28 +12,22 @@ import com.mailjet.client.resource.Contact;
 import com.mailjet.client.resource.ContactGetcontactslists;
 import com.mailjet.client.resource.Email;
 import com.mailjet.client.resource.Emailv31;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-
-import net.sf.jasperreports.engine.JRException;
-import org.json.JSONException;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.servlet.ServletException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = GestionCompteBancaireApplication.class)
@@ -43,15 +36,6 @@ import static org.hamcrest.CoreMatchers.is;
 @TestPropertySource("/application.properties")
 public class MailExtraitServiceTest {
     private MailExtraitService mailExtraitService;
-    private final long existingContactID = 2;
-
-//    @Test
-//    public void sendExtraitTest() throws MailjetSocketTimeoutException, MailjetException, JSONException, ServletException, IOException, JRException {
-//        Mail sendmail=new Mail("envoi extrait","test","salut","ee","ss","mustapha@gamil.com");
-//        mailExtraitService.sendExtrait(sendmail);
-//        assertThat(sendmail.getEmail(),is("mustapha@gamil.com"));
-//
-//    }
 
     @Test
     public void testSimpleGet() throws MailjetException, MailjetSocketTimeoutException {
@@ -83,7 +67,7 @@ public class MailExtraitServiceTest {
                 .filter(Contact.OFFSET, 2);
         response = client.get(contacts);
         String url = response.getString("url");
-        Boolean test = url.equals("https://api.mailjet.com/v3/REST/contact?Offset=2&Limit=10") ||
+        boolean test = url.equals("https://api.mailjet.com/v3/REST/contact?Offset=2&Limit=10") ||
                 url.equals("https://api.mailjet.com/v3/REST/contact?Limit=10&Offset=2");
         assertTrue(test);
     }
@@ -97,6 +81,7 @@ public class MailExtraitServiceTest {
         // Simple contact GET request
         MailjetRequest contacts;
         MailjetResponse response;
+        long existingContactID = 2;
         contacts = new MailjetRequest(ContactGetcontactslists.resource, existingContactID);
         response = client.get(contacts);
         assertEquals(response.getString("url"), "https://api.mailjet.com/v3/REST/contact/" + existingContactID + "/getcontactslists");
@@ -110,7 +95,7 @@ public class MailExtraitServiceTest {
         System.out.println("TESTING: Send email with Send API v3.0");
         MailjetRequest request;
         MailjetResponse response;
-        String fromEmail =  "pilot@mailjet.com",
+        String fromEmail = "pilot@mailjet.com",
                 fromName = "Mailjet Pilot",
                 subject = "Your email flight plan!",
                 textPart = "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
