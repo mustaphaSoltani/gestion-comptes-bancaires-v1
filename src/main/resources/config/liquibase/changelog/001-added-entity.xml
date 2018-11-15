@@ -54,10 +54,10 @@
     </changeSet>
     <changeSet id="003" author="mustapha">
         <addForeignKeyConstraint baseColumnNames="client_id"
-                                 baseTableName="compte"
+                                 baseTableName="ax_compte"
                                  constraintName="fk_compte_client_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="client"/>
+                                 referencedTableName="ax_client"/>
 
     </changeSet>
     <!--

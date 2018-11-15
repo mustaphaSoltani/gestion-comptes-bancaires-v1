@@ -3,6 +3,7 @@ package com.axeane.web.rest;
 import com.axeane.GestionCompteBancaireApplication;
 import com.axeane.domain.Compte;
 import com.axeane.domain.Mouvement;
+import com.axeane.domain.dto.MouvementDTO;
 import com.axeane.domain.enumuration.TypeMouvementEnum;
 import com.axeane.repository.CompteRepository;
 import com.axeane.repository.MouvementRepository;
@@ -70,6 +71,7 @@ public class MouvementResourceTest {
     private MockMvc restMouvementMockMvc;
 
     private Mouvement mouvement;
+    private MouvementDTO mouvementDTO;
 
     @Before
     public void setUp() {
@@ -81,22 +83,22 @@ public class MouvementResourceTest {
                 .setMessageConverters(jacksonMessageConverter).build();
     }
 
-    public Mouvement createEntity(EntityManager em) {
-        Mouvement mouvement = new Mouvement();
+    public MouvementDTO createEntity(EntityManager em) {
+        MouvementDTO mouvement = new MouvementDTO();
         Compte compte = new Compte();
         compte.setNumCompte(456);
         compteRepository.save(compte);
-        mouvement.setCompteId(compte.getId());
-        mouvement.setSomme(DEFAULT_SOMME);
-        mouvement.setTypeMouvement(DEFAULT_TYPE_MOUVEMENT);
-        mouvement.setDate(DEFAULT_DATE);
+        mouvement.setMouvementCompteId(compte.getId());
+        mouvement.setMouvementSomme(DEFAULT_SOMME);
+        mouvement.setMouvementTypeMouvement(DEFAULT_TYPE_MOUVEMENT);
+        mouvement.setMouvementDate(DEFAULT_DATE);
 
         return mouvement;
     }
 
     @Before
     public void initTest() {
-        mouvement = createEntity(em);
+        mouvementDTO = createEntity(em);
     }
 
     @Test
@@ -105,7 +107,7 @@ public class MouvementResourceTest {
         int databaseSizeBeforeCreate = mouvementRepository.findAll().size();
         restMouvementMockMvc.perform(post("/api/mouvements")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(mouvement)))
+                .content(TestUtil.convertObjectToJsonBytes(mouvementDTO)))
                 .andExpect(status().isCreated());
         // Validate the Mouvement in the database
         List<Mouvement> mouvementList = mouvementRepository.findAll();
@@ -123,7 +125,7 @@ public class MouvementResourceTest {
         int databaseSizeBeforeUpdate = mouvementRepository.findAll().size();
 
         // Update the Mouvement
-        Mouvement updatedMouvement = mouvementRepository.getOne(mouvement.getId());
+        Mouvement updatedMouvement = mouvementRepository.getOne(mouvementDTO.getMouvementId());
         updatedMouvement.setDate(UPDATED_DATE);
         updatedMouvement.setSomme(UPDATED_SOMME);
         updatedMouvement.setTypeMouvement(UPDATED_TYPE_MOUVEMENT);
@@ -149,9 +151,9 @@ public class MouvementResourceTest {
         restMouvementMockMvc.perform(get("/api/mouvements/{id}", mouvementSaved.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.id").value(mouvementSaved.getId()))
-                .andExpect(jsonPath("$.somme").value(DEFAULT_SOMME))
-                .andExpect(jsonPath("$.typeMouvement").value(DEFAULT_TYPE_MOUVEMENT.toString()));
+                .andExpect(jsonPath("$.mouvementId").value(mouvementSaved.getId()))
+                .andExpect(jsonPath("$.mouvementSomme").value(DEFAULT_SOMME))
+                .andExpect(jsonPath("$.mouvementTypeMouvement").value(DEFAULT_TYPE_MOUVEMENT.toString()));
     }
 
     @Test

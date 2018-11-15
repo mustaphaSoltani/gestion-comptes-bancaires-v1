@@ -2,6 +2,9 @@ package com.axeane.service.business;
 
 import com.axeane.domain.Client;
 import com.axeane.domain.Mouvement;
+import com.axeane.domain.dto.ClientDTO;
+import com.axeane.domain.dto.MouvementDTO;
+import com.axeane.domain.mapper.ClientMapper;
 import com.axeane.models.MouvementModel;
 import com.axeane.service.ClientService;
 import com.axeane.service.MouvementService;
@@ -10,6 +13,7 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,7 +30,7 @@ import java.util.Map;
 @Service
 public class ExtraitCompteBancaireService {
     private final Logger log = LoggerFactory.getLogger(ClientResource.class);
-
+    private ClientMapper mapper = Mappers.getMapper(ClientMapper.class);
     private final ClientService clientService;
     private final MouvementService mouvementService;
 
@@ -42,29 +46,29 @@ public class ExtraitCompteBancaireService {
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
         Map<String, Object> parametreMap = new HashMap<>();
 
-        Client client = clientService.getClientBynNumCompte(numCompte);
+        ClientDTO client = clientService.getClientBynNumCompte(numCompte);
 
-        List<Mouvement> mouvements = mouvementService.findAllMouvementByCompte(numCompte);
-        BigDecimal solde = mouvements.iterator().next().getCompte().getSolde();
+        List<MouvementDTO> mouvements = mouvementService.findAllMouvementByCompte(numCompte);
+        BigDecimal solde = mouvements.iterator().next().getMouvementCompte().getSolde();
         List<MouvementModel> mouvementModels = new ArrayList<>();
-        for (Mouvement detailsMouvement : mouvementService.findAllMouvementByCompte(numCompte)) {
+        for (MouvementDTO detailsMouvement : mouvementService.findAllMouvementByCompte(numCompte)) {
             MouvementModel detailsModel = new MouvementModel();
-            detailsModel.setDate(detailsMouvement.getDate());
-            detailsModel.setSomme(detailsMouvement.getSomme());
-            detailsModel.setTypeMouvement(detailsMouvement.getTypeMouvement());
+            detailsModel.setDate(detailsMouvement.getMouvementDate());
+            detailsModel.setSomme(detailsMouvement.getMouvementSomme());
+            detailsModel.setTypeMouvement(detailsMouvement.getMouvementTypeMouvement());
             BigDecimal resultSolde = BigDecimal.ZERO;
 
-            switch (detailsMouvement.getTypeMouvement().toString()) {
+            switch (detailsMouvement.getMouvementTypeMouvement().toString()) {
                 case "RETRAIT":
-                    resultSolde = solde.subtract(detailsMouvement.getSomme());
+                    resultSolde = solde.subtract(detailsMouvement.getMouvementSomme());
                     solde = resultSolde;
                     break;
                 case "VERSEMENT":
-                    resultSolde = solde.add(detailsMouvement.getSomme());
+                    resultSolde = solde.add(detailsMouvement.getMouvementSomme());
                     solde = resultSolde;
                     break;
                 case "VIREMENT":
-                    resultSolde = solde.add(detailsMouvement.getSomme());
+                    resultSolde = solde.add(detailsMouvement.getMouvementSomme());
                     solde = resultSolde;
                     break;
             }
@@ -73,10 +77,10 @@ public class ExtraitCompteBancaireService {
         }
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(mouvementModels);
         parametreMap.put("numCompte", numCompte);
-        parametreMap.put("nom", client.getNom());
-        parametreMap.put("prenom", client.getPrenom());
-        parametreMap.put("adresse", client.getAdresse());
-        parametreMap.put("email", client.getEmail());
+        parametreMap.put("nom", client.getClientName());
+        parametreMap.put("prenom", client.getClientPrenom());
+        parametreMap.put("adresse", client.getClientAdresse());
+        parametreMap.put("email", client.getClientEmail());
         parametreMap.put("datasource", jrDataSource);
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametreMap, jrDataSource);

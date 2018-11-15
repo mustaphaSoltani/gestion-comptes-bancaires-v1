@@ -2,6 +2,8 @@ package com.axeane.web.rest;
 
 import com.axeane.GestionCompteBancaireApplication;
 import com.axeane.domain.Client;
+import com.axeane.domain.dto.ClientDTO;
+import com.axeane.domain.mapper.ClientMapper;
 import com.axeane.repository.ClientRepository;
 import com.axeane.service.ClientService;
 import com.axeane.service.business.ExtraitCompteBancaireService;
@@ -11,6 +13,7 @@ import com.axeane.web.rest.config.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -38,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DataJpaTest
 @ComponentScan({"com.axeane.domain.util", "com.axeane.service"})
 public class ClientResourceTest {
-
+    private ClientMapper mapper = Mappers.getMapper(ClientMapper.class);
     private static final String DEFAULT_NOM1 = "Soltani";
     private static final String UPDATED_NOM1 = "AAAA";
 
@@ -79,7 +82,8 @@ public class ClientResourceTest {
 
     private MockMvc restClientMockMvc;
 
-    private Client client;
+    private ClientDTO clientDTO;
+
 
     @Before
     public void setUp() throws Exception {
@@ -91,20 +95,20 @@ public class ClientResourceTest {
                 .setMessageConverters(jacksonMessageConverter).build();
     }
 
-    public Client createEntity(EntityManager em) {
-        Client client = new Client();
-        client.setNom(DEFAULT_NOM1);
-        client.setCin(DEFAULT_CIN);
-        client.setPrenom(DEFAULT_PRENOM1);
-        client.setEmail(DEFAULT_EMAIL);
-        client.setNumTel(DEFAULT_NUM_TEL);
-        client.setAdresse(DEFAULT_ADRESSE);
+    public ClientDTO createEntity(EntityManager em) {
+        ClientDTO client = new ClientDTO();
+        client.setClientName(DEFAULT_NOM1);
+        client.setClientCin(DEFAULT_CIN);
+        client.setClientPrenom(DEFAULT_PRENOM1);
+        client.setClientEmail(DEFAULT_EMAIL);
+        client.setClientNumTel(DEFAULT_NUM_TEL);
+        client.setClientAdresse(DEFAULT_ADRESSE);
         return client;
     }
 
     @Before
     public void initTest() {
-        client = createEntity(em);
+        clientDTO = createEntity(em);
     }
 
     @Test
@@ -112,7 +116,7 @@ public class ClientResourceTest {
         int databaseSizeBeforeCreate = clientRepository.findAll().size();
         restClientMockMvc.perform(post("/api/clients")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(client)))
+                .content(TestUtil.convertObjectToJsonBytes(clientDTO)))
                 .andExpect(status().isCreated());
         // Validate the Client in the database
         List<Client> clientList = clientRepository.findAll();
@@ -129,16 +133,16 @@ public class ClientResourceTest {
     @Test
     public void updateClient() throws Exception {
         // Initialize the database
-        clientRepository.save(client);
-        int databaseSizeBeforeUpdate = clientRepository.findAll().size();
+        Client client=clientService.createClient(clientDTO);
+        int databaseSizeBeforeUpdate = clientService.findAllClient().size();
 
-        Client updatedClient = clientRepository.getClientById(client.getId());
-        updatedClient.setEmail(UPDATED_EMAIL);
-        updatedClient.setNumTel(UPDATED_NUM_TEL);
-        updatedClient.setNom(UPDATED_NOM1);
-        updatedClient.setPrenom(UPDATED_PRENOM);
-        updatedClient.setAdresse(UPDATED_ADRESSE);
-        updatedClient.setCin(UPDATED_CIN);
+        ClientDTO updatedClient = clientService.getClientById(client.getId());
+        updatedClient.setClientEmail(UPDATED_EMAIL);
+        updatedClient.setClientNumTel(UPDATED_NUM_TEL);
+        updatedClient.setClientName(UPDATED_NOM1);
+        updatedClient.setClientPrenom(UPDATED_PRENOM);
+        updatedClient.setClientAdresse(UPDATED_ADRESSE);
+        updatedClient.setClientCin(UPDATED_CIN);
 
         restClientMockMvc.perform(put("/api/clients")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -158,52 +162,48 @@ public class ClientResourceTest {
     @Test
     public void getAllClient() throws Exception {
         // Initialize the database
-        Client clientSaved = clientRepository.saveAndFlush(client);
+        //Client client=mapper.clientDTOToClient(clientDTO);
+        ;
+        Client clientSaved = clientRepository.saveAndFlush(clientService.createClient(clientDTO));
         // Get all the clientList
-        restClientMockMvc.perform(get("/api/clients?sort=id,desc", clientSaved.getId()))
+        restClientMockMvc.perform(get("/api/clients", clientSaved.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.[*].id").value(hasItem(clientSaved.getId().intValue())))
-                .andExpect(jsonPath("$.[*].nom").value(hasItem(DEFAULT_NOM1)))
-                .andExpect(jsonPath("$.[*].numTel").value(hasItem(DEFAULT_NUM_TEL)))
-                .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
-                .andExpect(jsonPath("$.[*].prenom").value(hasItem(DEFAULT_PRENOM1)))
-                .andExpect(jsonPath("$.[*].adresse").value(hasItem(DEFAULT_ADRESSE)))
-                .andExpect(jsonPath("$.[*].cin").value(hasItem(DEFAULT_CIN)))
+               .andExpect(jsonPath("$.[*].clientId").value(hasItem(clientSaved.getId().intValue())))
+                .andExpect(jsonPath("$.[*].clientName").value(hasItem(DEFAULT_NOM1)))
+                .andExpect(jsonPath("$.[*].clientNumTel").value(hasItem(DEFAULT_NUM_TEL)))
+                .andExpect(jsonPath("$.[*].clientEmail").value(hasItem(DEFAULT_EMAIL)))
+                .andExpect(jsonPath("$.[*].clientPrenom").value(hasItem(DEFAULT_PRENOM1)))
+                .andExpect(jsonPath("$.[*].clientAdresse").value(hasItem(DEFAULT_ADRESSE)))
+                .andExpect(jsonPath("$.[*].clientCin").value(hasItem(DEFAULT_CIN)))
         ;
     }
 
     @Test
     public void getClientById() throws Exception {
         // Initialize the database
-        Client clientSaved = clientRepository.saveAndFlush(client);
+        Client clientSaved = clientService.createClient(clientDTO);
         // Get the clients
         restClientMockMvc.perform(get("/api/clients/{id}", clientSaved.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.id").value(clientSaved.getId()))
-                .andExpect(jsonPath("$.numTel").value(DEFAULT_NUM_TEL))
-                .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
-                .andExpect(jsonPath("$.adresse").value(DEFAULT_ADRESSE))
-                .andExpect(jsonPath("$.nom").value(DEFAULT_NOM1))
-                .andExpect(jsonPath("$.prenom").value(DEFAULT_PRENOM1));
-    }
-
-    @Test
-    public void getNonExistingClient() throws Exception {
-        // Get the client
-        restClientMockMvc.perform(get("/api/clients/{id}", Long.MAX_VALUE))
-                .andExpect(status().isNotFound());
+                .andExpect(jsonPath("$.clientId").value(clientSaved.getId()))
+                .andExpect(jsonPath("$.clientNumTel").value(DEFAULT_NUM_TEL))
+                .andExpect(jsonPath("$.clientEmail").value(DEFAULT_EMAIL))
+                .andExpect(jsonPath("$.clientAdresse").value(DEFAULT_ADRESSE))
+                .andExpect(jsonPath("$.clientName").value(DEFAULT_NOM1))
+                .andExpect(jsonPath("$.clientPrenom").value(DEFAULT_PRENOM1));
     }
 
     @Test
     public void deleteClient() throws Exception {
         // Initialize the database
-        clientRepository.save(client);
+        Client client=mapper.clientDTOToClient(clientDTO);
+        Client clientSaved= clientRepository.save(client);
         int databaseSizeBeforeDelete = clientRepository.findAll().size();
 
         // Get the client
-        restClientMockMvc.perform(delete("/api/clients/{id}", client.getId())
+        restClientMockMvc.perform(delete("/api/clients/{id}", clientSaved.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 

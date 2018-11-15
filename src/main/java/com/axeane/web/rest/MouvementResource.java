@@ -1,7 +1,7 @@
 package com.axeane.web.rest;
 
 import com.axeane.domain.Mouvement;
-import com.axeane.domain.Views;
+import com.axeane.domain.dto.MouvementDTO;
 import com.axeane.domain.util.ResponseUtil;
 import com.axeane.service.MouvementService;
 import com.axeane.web.util.HeaderUtil;
@@ -33,10 +33,9 @@ public class MouvementResource {
     }
 
     @PostMapping
-    @JsonView(value = {Views.MouvementView.class})
-    public ResponseEntity<Mouvement> createMouvement(@Valid @RequestBody Mouvement mouvement) throws URISyntaxException {
+    public ResponseEntity<Mouvement> createMouvement(@Valid @RequestBody MouvementDTO mouvement) throws URISyntaxException {
         log.debug("REST request to save Mouvement : {}", mouvement);
-        if (mouvement.getId() != null) {
+        if (mouvement.getMouvementId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new mouvement cannot already have an ID")).body(null);
         }
         Mouvement result = mouvementService.saveMouvement(mouvement);
@@ -46,31 +45,28 @@ public class MouvementResource {
     }
 
     @PutMapping
-    @JsonView(value = {Views.MouvementView.class})
-    public ResponseEntity<Mouvement> updateClient(@Valid @RequestBody Mouvement mouvement) throws URISyntaxException {
+    public ResponseEntity<Mouvement> updateClient(@Valid @RequestBody MouvementDTO mouvement) throws URISyntaxException {
         log.debug("REST request to update Mouvement : {}", mouvement);
-        if (mouvement.getId() == null) {
+        if (mouvement.getMouvementId() == null) {
             return createMouvement(mouvement);
         }
         Mouvement result = mouvementService.saveMouvement(mouvement);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, mouvement.getId().toString()))
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, mouvement.getMouvementId().toString()))
                 .body(result);
     }
 
     @GetMapping("/numCte/{numC}")
-    @JsonView(value = {Views.MouvementView.class})
-    public ResponseEntity<List<Mouvement>> getMouvementByNumCompte(@PathVariable Integer numC) {
+    public ResponseEntity<List<MouvementDTO>> getMouvementByNumCompte(@PathVariable Integer numC) {
         log.debug("REST request to get a page of mouvements");
-        List<Mouvement> page = mouvementService.findAllMouvementByCompte(numC);
+        List<MouvementDTO> page = mouvementService.findAllMouvementByCompte(numC);
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    @JsonView(value = {Views.MouvementView.class})
     public ResponseEntity getMouvementById(@PathVariable Long id) {
         log.debug("REST request to get Mouvement : {}", id);
-        Optional<Mouvement> mouvement = Optional.ofNullable(mouvementService.getMouvementById(id));
+        Optional<MouvementDTO> mouvement = Optional.ofNullable(mouvementService.getMouvementById(id));
         return ResponseUtil.wrapOrNotFound(mouvement);
     }
 

@@ -1,7 +1,6 @@
 package com.axeane.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -22,16 +21,13 @@ public class Compte implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(value = {Views.ClientView.class, Views.CompteView.class})
     private Long id;
 
     @NotNull
     @Column(name = "num_compte", unique = true)
-    @JsonView(value = {Views.ClientView.class, Views.CompteView.class})
     private Integer numCompte;
 
     @Column(name = "solde")
-    @JsonView(value = {Views.ClientView.class, Views.CompteView.class})
     private BigDecimal solde;
 
     @Transient
@@ -39,11 +35,13 @@ public class Compte implements Serializable {
     private Long clientId;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "client_id")
     private Client client;
 
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "compte")
-    @JsonView(value = {Views.CompteView.class})
+    @JsonIgnore
     private Set<Mouvement> mouvements = new HashSet<>();
 
     public Compte() {

@@ -1,7 +1,7 @@
 package com.axeane.web.rest;
 
 import com.axeane.domain.Client;
-import com.axeane.domain.Views;
+import com.axeane.domain.dto.ClientDTO;
 import com.axeane.domain.util.ResponseUtil;
 import com.axeane.service.ClientService;
 import com.axeane.service.business.ExtraitCompteBancaireService;
@@ -47,68 +47,61 @@ public class ClientResource {
     }
 
     @PostMapping
-    @JsonView(value = {Views.ClientView.class})
-    public ResponseEntity<Client> createClient(@Valid @RequestBody Client client) throws URISyntaxException {
-        log.debug("REST request to save Client : {}", client.toString());
-        if (client.getId() != null) {
+    public ResponseEntity<Client> createClient(@Valid @RequestBody ClientDTO clientDTO) throws URISyntaxException {
+        log.debug("REST request to save Client : {}", clientDTO.toString());
+        if (clientDTO.getClientId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new client cannot already have an ID")).body(null);
         }
-        Client result = clientService.createClient(client);
+        Client result = clientService.createClient(clientDTO);
         return ResponseEntity.created(new URI("/api/clients/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
                 .body(result);
     }
 
     @PutMapping
-    @JsonView(value = {Views.ClientView.class})
-    public ResponseEntity<Client> updateClient(@Valid @RequestBody Client client) throws URISyntaxException {
-        log.debug("REST request to update Client : {}", client.toString());
-        if (client.getId() == null) {
-            return createClient(client);
+    public ResponseEntity<Client> updateClient(@Valid @RequestBody ClientDTO clientDTO) throws URISyntaxException {
+        log.debug("REST request to update Client : {}", clientDTO.toString());
+        if (clientDTO.getClientId() == null) {
+            return createClient(clientDTO);
         }
-        Client result = clientService.createClient(client);
+        Client result = clientService.createClient(clientDTO);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, client.getId().toString()))
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, clientDTO.getClientId().toString()))
                 .body(result);
     }
 
     @GetMapping
-    @JsonView(value = {Views.ClientView.class})
-    public ResponseEntity<List<Client>> getAllClient() {
+    public ResponseEntity<List<ClientDTO>> getAllClient() {
         log.debug("REST request to get a page of Clients");
-        List<Client> page = clientService.findAllClient();
+        List<ClientDTO> page = clientService.findAllClient();
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    @JsonView(value = {Views.ClientView.class})
     public ResponseEntity getClientById(@PathVariable Long id) {
         log.debug("REST request to get Client : {}", id);
-        Optional<Client> client = Optional.ofNullable(clientService.getClientById(id));
+        Optional<ClientDTO> client = Optional.ofNullable(clientService.getClientById(id));
         return ResponseUtil.wrapOrNotFound(client);
     }
 
     @GetMapping("cin/{cin}")
-    @JsonView(value = {Views.ClientView.class})
     public ResponseEntity getClientByCin(@PathVariable String cin) {
         log.debug("REST request to get Client : {}", cin);
-        Optional<Client> client = Optional.ofNullable(clientService.getClientBynCin(cin));
+        Optional<ClientDTO> client = Optional.ofNullable(clientService.getClientBynCin(cin));
         return ResponseUtil.wrapOrNotFound(client);
     }
 
     @GetMapping("nom/{nom}")
-    @JsonView(value = {Views.ClientView.class})
-    public ResponseEntity<List<Client>> getClientByNom(@PathVariable String nom) {
+    public ResponseEntity<List<ClientDTO>> getClientByNom(@PathVariable String nom) {
         log.debug("REST request to get Client : {}", nom);
-        List<Client> page = clientService.getClientByNom(nom);
+        List<ClientDTO> page = clientService.getClientByNom(nom);
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
     @GetMapping("numCpte/{numCompte}")
-    @JsonView(value = Views.ClientView.class)
     public ResponseEntity getClientBynumCompte(@PathVariable Integer numCompte) {
         log.debug("REST request to get Client : {}", numCompte);
-        Optional<Client> client = Optional.ofNullable(clientService.getClientBynNumCompte(numCompte));
+        Optional<ClientDTO> client = Optional.ofNullable(clientService.getClientBynNumCompte(numCompte));
         return ResponseUtil.wrapOrNotFound(client);
     }
 

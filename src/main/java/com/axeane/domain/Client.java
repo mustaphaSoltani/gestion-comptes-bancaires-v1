@@ -1,6 +1,10 @@
 package com.axeane.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -19,44 +23,35 @@ public class Client implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(value = {Views.ClientView.class})
     private Long id;
 
     @NotNull
     @Size(max = 8, min = 8)
     @Column(name = "cin", unique = true, length = 8)
-    @JsonView(value = {Views.ClientView.class})
     private String cin;
 
     @Size(max = 50)
     @Column(name = "nom")
-    @JsonView(value = {Views.ClientView.class})
     private String nom;
 
     @Size(max = 50)
     @Column(name = "prenom")
-    @JsonView(value = {Views.ClientView.class})
     private String prenom;
 
     @Column(name = "adresse")
-    @JsonView(value = {Views.ClientView.class})
     private String adresse;
 
     @Email
     @Size(min = 10, max = 60)
     @Column(name = "email")
-    @JsonView(value = {Views.ClientView.class})
     private String email;
 
     @Size(min = 8, max = 8)
     @Column(name = "num_tel", length = 8)
-    @JsonView(value = {Views.ClientView.class})
     private String numTel;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "client", cascade = CascadeType.ALL)
-    @JsonView(value = {Views.ClientView.class})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "client", cascade = CascadeType.ALL)
     private Set<Compte> comptes = new HashSet<>();
-
     public Client() {
     }
 
