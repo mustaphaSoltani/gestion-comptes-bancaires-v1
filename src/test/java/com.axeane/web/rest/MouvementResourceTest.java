@@ -120,7 +120,7 @@ public class MouvementResourceTest {
     @Test
     public void getMouvementById() throws Exception {
         // Initialize the database
-        Mouvement mouvementSaved = mouvementRepository.saveAndFlush(mouvement);
+        Mouvement mouvementSaved = mouvementService.saveMouvement(mouvementDTO);
         // Get the clients
         restMouvementMockMvc.perform(get("/api/mouvements/{id}", mouvementSaved.getId()))
                 .andExpect(status().isOk())
@@ -141,11 +141,11 @@ public class MouvementResourceTest {
     @Transactional
     public void deleteMouvementTest() throws Exception {
         // Initialize the database
-        mouvementRepository.save(mouvement);
-        int databaseSizeBeforeDeleted = mouvementRepository.findAll().size();
+        Mouvement mouvement1=mouvementService.saveMouvement(mouvementDTO);
+        int databaseSizeBeforeDeleted = mouvementService.findAllMouvementByCompte(mouvementDTO.getMouvementCompte().getNumCompte()).size();
 
         // Get the mouvement
-        restMouvementMockMvc.perform(delete("/api/mouvements/{id}", mouvement.getId())
+        restMouvementMockMvc.perform(delete("/api/mouvements/{id}", mouvement1.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
