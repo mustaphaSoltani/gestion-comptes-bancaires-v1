@@ -84,16 +84,17 @@ public class MouvementResourceTest {
     }
 
     public MouvementDTO createEntity(EntityManager em) {
-        MouvementDTO mouvement = new MouvementDTO();
+        MouvementDTO mouvementDTO = new MouvementDTO();
         Compte compte = new Compte();
         compte.setNumCompte(456);
         compteRepository.save(compte);
-        mouvement.setMouvementCompteId(compte.getId());
-        mouvement.setMouvementSomme(DEFAULT_SOMME);
-        mouvement.setMouvementTypeMouvement(DEFAULT_TYPE_MOUVEMENT);
-        mouvement.setMouvementDate(DEFAULT_DATE);
+        mouvementDTO.setMouvementCompteId(compte.getId());
+        mouvementDTO.setMouvementSomme(DEFAULT_SOMME);
+        mouvementDTO.setMouvementTypeMouvement(DEFAULT_TYPE_MOUVEMENT);
+        mouvementDTO.setMouvementDate(DEFAULT_DATE);
+        mouvementDTO.setMouvementCompte(compte);
 
-        return mouvement;
+        return mouvementDTO;
     }
 
     @Before
