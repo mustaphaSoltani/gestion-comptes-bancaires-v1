@@ -13,9 +13,20 @@ public class ClientDTO {
     private String clientAdresse;
     private String clientEmail;
     private String clientNumTel;
-    private Set<CompteDTO> clientComptes = new HashSet<>();
+    private Set<CompteDTO> comptes = new HashSet<>();
 
     public ClientDTO() {
+    }
+
+    public ClientDTO(Long clientId, String clientCin, String clientName, String clientPrenom, String clientAdresse, String clientEmail, String clientNumTel, Set<CompteDTO> comptesClient) {
+        this.clientId = clientId;
+        this.clientCin = clientCin;
+        this.clientName = clientName;
+        this.clientPrenom = clientPrenom;
+        this.clientAdresse = clientAdresse;
+        this.clientEmail = clientEmail;
+        this.clientNumTel = clientNumTel;
+        this.comptes = comptesClient;
     }
 
     public Long getClientId() {
@@ -74,11 +85,11 @@ public class ClientDTO {
         this.clientNumTel = clientNumTel;
     }
 
-    public Set<CompteDTO> getClientComptes() {
-        return clientComptes;
+    public Set<CompteDTO> getComptes() {
+        return comptes;
     }
 
-    public void setClientComptes(Set<CompteDTO> clientComptes) {
-        this.clientComptes = clientComptes;
+    public void setComptes(Set<CompteDTO> clientComptes) {
+        this.comptes = clientComptes;
     }
 }

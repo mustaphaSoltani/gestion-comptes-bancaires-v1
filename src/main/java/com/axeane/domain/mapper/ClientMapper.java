@@ -11,16 +11,26 @@ import java.util.List;
 @Mapper
 public interface ClientMapper {
 
-    @Mappings({@Mapping(target = "clientId", source = "entity.id"), @Mapping(target = "clientCin", source = "entity.cin"),
-            @Mapping(target = "clientName", source = "entity.nom"), @Mapping(target = "clientPrenom", source = "entity.prenom"),
-            @Mapping(target = "clientAdresse", source = "entity.adresse"), @Mapping(target = "clientEmail", source = "entity.email"),
-            @Mapping(target = "clientNumTel", source = "entity.numTel")})
-    ClientDTO clientToClientDTO(Client entity);
+    @Mappings({@Mapping(target = "clientId", source = "client.id"),
+            @Mapping(target = "clientCin", source = "client.cin"),
+            @Mapping(target = "clientName", source = "client.nom"),
+            @Mapping(target = "clientPrenom", source = "client.prenom"),
+            @Mapping(target = "clientAdresse", source = "client.adresse"),
+            @Mapping(target = "clientEmail", source = "client.email"),
+            @Mapping(target = "clientNumTel", source = "client.numTel"),
+            @Mapping(target = "comptes", source = "client.comptes")
+    })
+    ClientDTO clientToClientDTO(Client client);
 
-    @Mappings({@Mapping(target = "id", source = "clientId"), @Mapping(target = "cin", source = "clientCin"),
-            @Mapping(target = "nom", source = "clientName"), @Mapping(target = "prenom", source = "clientPrenom"),
-            @Mapping(target = "adresse", source = "clientAdresse"), @Mapping(target = "email", source = "clientEmail"),
-            @Mapping(target = "numTel", source = "clientNumTel")})
+    @Mappings({@Mapping(target = "id", source = "clientId"),
+            @Mapping(target = "cin", source = "clientCin"),
+            @Mapping(target = "nom", source = "clientName"),
+            @Mapping(target = "prenom", source = "clientPrenom"),
+            @Mapping(target = "adresse", source = "clientAdresse"),
+            @Mapping(target = "email", source = "clientEmail"),
+            @Mapping(target = "numTel", source = "clientNumTel"),
+            @Mapping(target = "comptes", source = "comptes")
+    })
     Client clientDTOToClient(ClientDTO dto);
 
     List<Client> convertClientDTOListToClientList(List<ClientDTO> list);

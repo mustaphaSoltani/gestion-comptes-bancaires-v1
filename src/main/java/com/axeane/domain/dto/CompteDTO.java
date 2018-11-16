@@ -10,7 +10,9 @@ public class CompteDTO {
     private Long compteId;
     private Integer compteNumCompte;
     private BigDecimal soldeDTO;
+    @JsonIgnore
     private ClientDTO compteClient;
+    @JsonIgnore
     private Long compteClientId;
 
     public Long getCompteId() {
