@@ -35,10 +35,10 @@ public class ClientService {
     public Client createClient(ClientDTO clientDTO) {
         log.debug("Request to save Client : {}", clientDTO.toString());
 
-        clientDTO.getComptes().forEach(compte -> {
+        clientDTO.getClientComptes().forEach(compte -> {
             compte.setCompteClient(clientDTO);
         });
-        Set<CompteDTO> compteDTO = clientDTO.getComptes();
+        Set<CompteDTO> compteDTO = clientDTO.getClientComptes();
         Set<Compte> comptes = mapperCompte.convertCompteDTOSetToCompteSet(compteDTO);
 
         Client client = mapperClient.clientDTOToClient(clientDTO);
@@ -56,7 +56,7 @@ public class ClientService {
         Set<Compte> comptes=client.getComptes();
         Set<CompteDTO>compteDTO=mapperCompte.convertCompteSetToCompteDTOSet(comptes);
         ClientDTO clientDTO=mapperClient.clientToClientDTO(client);
-        clientDTO.setComptes(compteDTO);
+        clientDTO.setClientComptes(compteDTO);
         return clientDTO;
     }
 
@@ -67,7 +67,7 @@ public class ClientService {
         Set<Compte> comptes=clients.iterator().next().getComptes();
         Set<CompteDTO>compteDTO=mapperCompte.convertCompteSetToCompteDTOSet(comptes);
         List<ClientDTO>clientss=mapperClient.convertClientListToClientDTOList(clients);
-        clientss.iterator().next().setComptes(compteDTO);
+        clientss.iterator().next().setClientComptes(compteDTO);
         return clientss;
     }
 
@@ -78,7 +78,7 @@ public class ClientService {
         Set<Compte> comptes=client.getComptes();
         Set<CompteDTO>compteDTO=mapperCompte.convertCompteSetToCompteDTOSet(comptes);
         ClientDTO clientDTO=mapperClient.clientToClientDTO(client);
-        clientDTO.setComptes(compteDTO);
+        clientDTO.setClientComptes(compteDTO);
         return clientDTO;
     }
 
@@ -91,7 +91,7 @@ public class ClientService {
         Set<Compte> comptes=client.getComptes();
         Set<CompteDTO>compteDTO=mapperCompte.convertCompteSetToCompteDTOSet(comptes);
         ClientDTO clientDTO=mapperClient.clientToClientDTO(client);
-        clientDTO.setComptes(compteDTO);
+        clientDTO.setClientComptes(compteDTO);
         return clientDTO;
     }
 
@@ -102,7 +102,7 @@ public class ClientService {
         Set<Compte> comptes=clients.iterator().next().getComptes();
         Set<CompteDTO>compteDTO=mapperCompte.convertCompteSetToCompteDTOSet(comptes);
         List<ClientDTO>clientss=mapperClient.convertClientListToClientDTOList(clients);
-        clientss.iterator().next().setComptes(compteDTO);
+        clientss.iterator().next().setClientComptes(compteDTO);
         return clientss;
     }
 

@@ -2,9 +2,7 @@ package com.axeane.domain;
 
 import com.axeane.domain.enumuration.TypeMouvementEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -49,7 +47,6 @@ public class Mouvement implements Serializable {
     private Long compteId;
 
     @ManyToOne
-    //@JsonIgnore
     @JoinColumn(name = "compte_id")
     private Compte compte;
 

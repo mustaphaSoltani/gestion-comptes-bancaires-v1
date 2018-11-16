@@ -27,7 +27,4 @@ public interface ClientMapper {
 
     List<ClientDTO> convertClientListToClientDTOList(List<Client> list);
 
-//    ClientDTO clientToClientDTO(Client source);
-//
-//    Client clientDTOToClient(ClientDTO destination);
 }

@@ -2,7 +2,6 @@ package com.axeane.service;
 
 import com.axeane.domain.Compte;
 import com.axeane.domain.Mouvement;
-import com.axeane.domain.dto.CompteDTO;
 import com.axeane.domain.dto.MouvementDTO;
 import com.axeane.domain.mapper.CompteMapper;
 import com.axeane.domain.mapper.MouvementMapper;
@@ -40,13 +39,12 @@ public class MouvementService {
         }
         Optional<Compte> compte = compteRepository.findById(mouvementDTO.getMouvementCompteId());
 
-       if (compte.isPresent()) {
+        if (compte.isPresent()) {
             mouvementDTO.setMouvementCompte(compte.get());
         } else {
             throw new GestionCteBancaireException("compte n'existe pas");
         }
-        //Compte compte1=mapperCompte.compteDTOToCompte(compte)
-        Mouvement mouvement=mapperClient.mouvementDTOToMouvement(mouvementDTO);
+        Mouvement mouvement = mapperClient.mouvementDTOToMouvement(mouvementDTO);
         return mouvementRepository.save(mouvement);
     }
 
@@ -54,17 +52,14 @@ public class MouvementService {
     public List<MouvementDTO> findAllMouvementByCompte(Integer numC) {// get mouvement by compte
         log.debug("Request to get all Mouvements for Compte n°:", numC);
         Compte compte = compteRepository.findByNumCompte(numC);
-        List<Mouvement> mouvements= mouvementRepository.findAllByCompte(compte);
-        CompteDTO compteDTO=mapperCompte.compteToCompteDTO(compte);
-        List<MouvementDTO> mouvementsDTO = mapperClient.convertMouvementListToMouvementDTOList(mouvements);
-       // mouvementsDTO.iterator().next().setMouvementCompte(compteDTO);
-        return mouvementsDTO;
+        List<Mouvement> mouvements = mouvementRepository.findAllByCompte(compte);
+        return mapperClient.convertMouvementListToMouvementDTOList(mouvements);
     }
 
     @Transactional(readOnly = true)
     public MouvementDTO getMouvementById(Long id) {
         log.debug("Request to get Mouvement : {}", id);
-        Mouvement mouvement= mouvementRepository.findById(id).get();
+        Mouvement mouvement = mouvementRepository.findById(id).get();
         return mapperClient.mouvementToMouvementDTO(mouvement);
     }
 

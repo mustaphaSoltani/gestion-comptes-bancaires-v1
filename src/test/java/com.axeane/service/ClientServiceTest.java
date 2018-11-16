@@ -2,11 +2,9 @@ package com.axeane.service;
 
 import com.axeane.GestionCompteBancaireApplication;
 import com.axeane.domain.Client;
-import com.axeane.domain.Compte;
 import com.axeane.domain.dto.ClientDTO;
 import com.axeane.domain.dto.CompteDTO;
 import com.axeane.repository.ClientRepository;
-import com.axeane.service.ClientService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,12 +109,12 @@ public class ClientServiceTest {
         comtpe.setCompteNumCompte(321);
         Set<CompteDTO> comptes = new HashSet<>();
         comptes.add(comtpe);
-        clientDTO.setComptes(comptes);
+        clientDTO.setClientComptes(comptes);
         clientService.createClient(clientDTO);
         List<ClientDTO> listClientAfterSave = clientService.findAllClient();
-        ClientDTO clientSaved = clientService.getClientBynNumCompte(listClientAfterSave.get(listClientAfterSave.size() - 1).getComptes().iterator().next().getCompteNumCompte());
+        ClientDTO clientSaved = clientService.getClientBynNumCompte(listClientAfterSave.get(listClientAfterSave.size() - 1).getClientComptes().iterator().next().getCompteNumCompte());
         assertThat(clientSaved.getClientName(), is("Bilel"));
-        assertThat(clientSaved.getComptes().iterator().next().getCompteNumCompte(), is(321));
+        assertThat(clientSaved.getClientComptes().iterator().next().getCompteNumCompte(), is(321));
     }
 
     @Test

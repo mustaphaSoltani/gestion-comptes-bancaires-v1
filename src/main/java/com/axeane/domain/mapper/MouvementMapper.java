@@ -30,5 +30,4 @@ public interface MouvementMapper {
     List<Mouvement> convertMouvementDTOListToMouvementList(List<MouvementDTO> list);
 
     List<MouvementDTO> convertMouvementListToMouvementDTOList(List<Mouvement> list);
-
 }

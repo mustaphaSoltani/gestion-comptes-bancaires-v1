@@ -15,7 +15,5 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     Client getClientById(Long id);
 
-    Client getClientByComptes(Compte c);
-
     List<Client> getAllByNom(String nom);
 }

@@ -13,7 +13,7 @@ public class ClientDTO {
     private String clientAdresse;
     private String clientEmail;
     private String clientNumTel;
-    private Set<CompteDTO> comptes = new HashSet<>();
+    private Set<CompteDTO> clientComptes = new HashSet<>();
 
     public ClientDTO() {
     }
@@ -74,11 +74,11 @@ public class ClientDTO {
         this.clientNumTel = clientNumTel;
     }
 
-    public Set<CompteDTO> getComptes() {
-        return comptes;
+    public Set<CompteDTO> getClientComptes() {
+        return clientComptes;
     }
 
-    public void setComptes(Set<CompteDTO> comptes) {
-        this.comptes = comptes;
+    public void setClientComptes(Set<CompteDTO> clientComptes) {
+        this.clientComptes = clientComptes;
     }
 }
