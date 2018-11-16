@@ -118,6 +118,32 @@ public class MouvementResourceTest {
     }
 
     @Test
+    @Transactional
+    public void updateMouvement() throws Exception {
+        // Initialize the database
+        Mouvement mouvement1=mouvementService.saveMouvement(mouvementDTO);
+        int databaseSizeBeforeUpdate = mouvementService.findAllMouvementByCompte(mouvementDTO.getMouvementCompte().getNumCompte()).size();
+
+        // Update the Mouvement
+        Mouvement updatedMouvement = mouvement1;
+        updatedMouvement.setDate(UPDATED_DATE);
+        updatedMouvement.setSomme(UPDATED_SOMME);
+        updatedMouvement.setTypeMouvement(UPDATED_TYPE_MOUVEMENT);
+
+        restMouvementMockMvc.perform(put("/api/mouvements")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(updatedMouvement)))
+                .andExpect(status().isOk());
+
+        // Validate the Client in the database
+        List<Mouvement> mouvementList = mouvementRepository.findAll();
+        assertThat(mouvementList).hasSize(databaseSizeBeforeUpdate);
+        Mouvement testMouvement = mouvementList.get(mouvementList.size() - 1);
+        assertThat(testMouvement.getTypeMouvement()).isEqualTo(UPDATED_TYPE_MOUVEMENT);
+        assertThat(testMouvement.getSomme()).isEqualTo(UPDATED_SOMME);
+    }
+
+    @Test
     public void getMouvementById() throws Exception {
         // Initialize the database
         Mouvement mouvementSaved = mouvementService.saveMouvement(mouvementDTO);
@@ -153,4 +179,6 @@ public class MouvementResourceTest {
         List<Mouvement> mouvementtListt = mouvementRepository.findAll();
         assertThat(mouvementtListt).hasSize(databaseSizeBeforeDeleted - 1);
     }
+
+
 }
