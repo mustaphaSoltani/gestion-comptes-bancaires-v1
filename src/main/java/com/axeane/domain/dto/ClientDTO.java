@@ -1,7 +1,5 @@
 package com.axeane.domain.dto;
 
-import com.axeane.domain.Compte;
-
 import java.util.HashSet;
 import java.util.Set;
 
