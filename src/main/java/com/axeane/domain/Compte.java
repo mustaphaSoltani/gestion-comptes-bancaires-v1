@@ -9,9 +9,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "ax_compte")
@@ -43,7 +43,7 @@ public class Compte implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "compte")
     @JsonIgnore
-    private Set<Mouvement> mouvements = new HashSet<>();
+    private List<Mouvement> mouvements = new LinkedList<>();;
 
     public Compte() {
     }
@@ -92,11 +92,11 @@ public class Compte implements Serializable {
         this.client = client;
     }
 
-    public Set<Mouvement> getMouvements() {
+    public List<Mouvement> getMouvements() {
         return mouvements;
     }
 
-    public void setMouvements(Set<Mouvement> mouvements) {
+    public void setMouvements(List<Mouvement> mouvements) {
         this.mouvements = mouvements;
     }
 

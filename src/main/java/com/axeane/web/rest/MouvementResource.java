@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Set;
 import java.util.Optional;
 
 @RestController
@@ -33,33 +34,31 @@ public class MouvementResource {
     }
 
     @PostMapping
-    public ResponseEntity<Mouvement> createMouvement(@Valid @RequestBody MouvementDTO mouvement) throws URISyntaxException {
+    public ResponseEntity<MouvementDTO> createMouvement(@Valid @RequestBody MouvementDTO mouvement) throws URISyntaxException {
         log.debug("REST request to save Mouvement : {}", mouvement);
-        if (mouvement.getMouvementId() != null) {
+        if (mouvement.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new mouvement cannot already have an ID")).body(null);
         }
-        Mouvement result = mouvementService.saveMouvement(mouvement);
+        MouvementDTO result = mouvementService.saveMouvement(mouvement);
         return ResponseEntity.created(new URI("/api/mouvements/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
                 .body(result);
     }
 
     @PutMapping
-    public ResponseEntity<Mouvement> updateClient(@Valid @RequestBody MouvementDTO mouvement) throws URISyntaxException {
-        log.debug("REST request to update Mouvement : {}", mouvement);
-        if (mouvement.getMouvementId() == null) {
-            return createMouvement(mouvement);
-        }
-        Mouvement result = mouvementService.saveMouvement(mouvement);
+    public ResponseEntity<MouvementDTO> updateMouvement(@Valid @RequestBody MouvementDTO mouvementDto) throws URISyntaxException {
+        log.info("REST request to update Mouvement : {}");
+        log.info("REST request to update Mouvement : {}", mouvementDto.getId());
+        MouvementDTO result = mouvementService.saveMouvement(mouvementDto);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, mouvement.getMouvementId().toString()))
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
                 .body(result);
     }
 
-    @GetMapping("/numCte/{numC}")
-    public ResponseEntity<List<MouvementDTO>> getMouvementByNumCompte(@PathVariable Integer numC) {
+    @GetMapping("/numCte/{numCompte}")
+    public ResponseEntity<List<MouvementDTO>> getMouvementByNumCompte(@PathVariable Long numCompte) {
         log.debug("REST request to get a page of mouvements");
-        List<MouvementDTO> page = mouvementService.findAllMouvementByCompte(numC);
+        List<MouvementDTO> page = mouvementService.findMouvementByCompte(numCompte);
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 

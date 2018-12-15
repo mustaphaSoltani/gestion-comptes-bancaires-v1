@@ -1,13 +1,11 @@
 package com.axeane.web.rest;
 
-import com.axeane.domain.Client;
 import com.axeane.domain.dto.ClientDTO;
 import com.axeane.domain.util.ResponseUtil;
 import com.axeane.service.ClientService;
 import com.axeane.service.business.ExtraitCompteBancaireService;
 import com.axeane.service.business.MailExtraitService;
 import com.axeane.web.util.HeaderUtil;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.mailjet.client.resource.Contact;
 import net.sf.jasperreports.engine.JRException;
 import org.json.JSONArray;
@@ -47,24 +45,21 @@ public class ClientResource {
     }
 
     @PostMapping
-    public ResponseEntity<Client> createClient(@Valid @RequestBody ClientDTO clientDTO) throws URISyntaxException {
+    public ResponseEntity<ClientDTO> createClient(@Valid @RequestBody ClientDTO clientDTO) throws URISyntaxException {
         log.debug("REST request to save Client : {}", clientDTO.toString());
         if (clientDTO.getClientId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new client cannot already have an ID")).body(null);
         }
-        Client result = clientService.createClient(clientDTO);
-        return ResponseEntity.created(new URI("/api/clients/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+        ClientDTO result = clientService.createClient(clientDTO);
+        return ResponseEntity.created(new URI("/api/clients/" + result.getClientId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getClientId().toString()))
                 .body(result);
     }
 
     @PutMapping
-    public ResponseEntity<Client> updateClient(@Valid @RequestBody ClientDTO clientDTO) throws URISyntaxException {
+    public ResponseEntity<ClientDTO> updateClient(@Valid @RequestBody ClientDTO clientDTO) throws URISyntaxException {
         log.debug("REST request to update Client : {}", clientDTO.toString());
-        if (clientDTO.getClientId() == null) {
-            return createClient(clientDTO);
-        }
-        Client result = clientService.createClient(clientDTO);
+        ClientDTO result = clientService.createClient(clientDTO);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, clientDTO.getClientId().toString()))
                 .body(result);
@@ -99,7 +94,7 @@ public class ClientResource {
     }
 
     @GetMapping("numCpte/{numCompte}")
-    public ResponseEntity getClientBynumCompte(@PathVariable Integer numCompte) {
+    public ResponseEntity getClientBynumCompte(@PathVariable Long numCompte) {
         log.debug("REST request to get Client : {}", numCompte);
         Optional<ClientDTO> client = Optional.ofNullable(clientService.getClientBynNumCompte(numCompte));
         return ResponseUtil.wrapOrNotFound(client);
@@ -113,9 +108,9 @@ public class ClientResource {
     }
 
     @GetMapping("/extraitBancairepdf/{numC}")
-    public void entreprisesPdf(HttpServletResponse response, @PathVariable Integer numC) throws JRException, IOException {
+    public void entreprisesPdf(HttpServletResponse response, @PathVariable Long numC) throws JRException, IOException {
         log.debug("REST request to Extrait file pdf : {}");
-        ByteArrayInputStream byteArrayInputStream=extraitCompteBancaireService.exportextraitBancaireToPdf(numC);
+        ByteArrayInputStream byteArrayInputStream = extraitCompteBancaireService.exportextraitBancaireToPdf(numC);
         OutputStream os = response.getOutputStream();
 
         response.setContentType("application/pdf; name=\"MyFile.pdf\"");
@@ -130,14 +125,14 @@ public class ClientResource {
     }
 
     @PostMapping("/sendMail/{numCompte}")
-    public void sendByMail(@RequestBody String destinations, @PathVariable("numCompte") int numCompte) throws Exception {
+    public void sendByMail(@RequestBody String destinations, @PathVariable("numCompte") Long numCompte) throws Exception {
         ByteArrayInputStream byteArrayInputStream = extraitCompteBancaireService.exportextraitBancaireToPdf(numCompte);
         String[] des = destinations.split(";");
         JSONArray recipients = new JSONArray();
         for (String de : des) {
             recipients.put(new JSONObject().put(Contact.EMAIL, de));
         }
-        mailExtraitService.sendEmailWithMailJet(recipients, "extrait", "extrait",false,
-                true, true, byteArrayInputStream );
+        mailExtraitService.sendEmailWithMailJet(recipients, "extrait", "extrait", false,
+                true, true, byteArrayInputStream);
     }
 }

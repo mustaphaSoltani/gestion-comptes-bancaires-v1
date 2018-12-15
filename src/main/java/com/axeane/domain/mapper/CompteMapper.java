@@ -2,35 +2,20 @@ package com.axeane.domain.mapper;
 
 import com.axeane.domain.Compte;
 import com.axeane.domain.dto.CompteDTO;
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
-import java.util.Set;
 
-@Mapper
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", uses = {ClientMapper.class})
 public interface CompteMapper {
+    @InheritInverseConfiguration
+    CompteDTO compteToCompteDTO(Compte compte);
 
-    @Mappings({@Mapping(target = "compteId", source = "id"),
-            @Mapping(target = "compteNumCompte", source = "entity.numCompte"),
-            @Mapping(target = "soldeDTO", source = "entity.solde"),
-            @Mapping(target = "compteClientId", source = "entity.clientId")
-    })
-    CompteDTO compteToCompteDTO(Compte entity);
-
-    @Mappings({@Mapping(target = "id", source = "compteId"),
-            @Mapping(target = "numCompte", source = "compteNumCompte"),
-            @Mapping(target = "solde", source = "soldeDTO"),
-            @Mapping(target = "clientId", source = "compteClientId"),
-            })
-    Compte compteDTOToCompte(CompteDTO dto);
+    Compte compteDTOToCompte(CompteDTO compteDto);
 
     List<Compte> convertCompteDTOListToCompteList(List<CompteDTO> list);
 
     List<CompteDTO> convertCompteListToCompteDTOList(List<Compte> list);
-
-    Set<Compte> convertCompteDTOSetToCompteSet(Set<CompteDTO> list);
-
-    Set<CompteDTO> convertCompteSetToCompteDTOSet(Set<Compte> list);
 }

@@ -1,67 +1,57 @@
 package com.axeane.domain.dto;
 
-import com.axeane.domain.Compte;
 import com.axeane.domain.enumuration.TypeMouvementEnum;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class MouvementDTO {
-    private Long mouvementId;
-    private TypeMouvementEnum mouvementTypeMouvement;
-    private BigDecimal mouvementSomme;
-    private Date mouvementDate;
-    private Long mouvementCompteId;
-    private Compte mouvementCompte;
+    private Long Id;
+    private TypeMouvementEnum typeMouvement;
+    private BigDecimal somme;
+    private Date date;
+    private Long compteId;
 
     public MouvementDTO() {
     }
 
-    public Long getMouvementId() {
-        return mouvementId;
+    public Long getId() {
+        return Id;
     }
 
-    public void setMouvementId(Long mouvementId) {
-        this.mouvementId = mouvementId;
+    public void setId(Long id) {
+        Id = id;
     }
 
-    public TypeMouvementEnum getMouvementTypeMouvement() {
-        return mouvementTypeMouvement;
+    public TypeMouvementEnum getTypeMouvement() {
+        return typeMouvement;
     }
 
-    public void setMouvementTypeMouvement(TypeMouvementEnum mouvementTypeMouvement) {
-        this.mouvementTypeMouvement = mouvementTypeMouvement;
+    public void setTypeMouvement(TypeMouvementEnum typeMouvement) {
+        this.typeMouvement = typeMouvement;
     }
 
-    public Long getMouvementCompteId() {
-        return mouvementCompteId;
+    public BigDecimal getSomme() {
+        return somme;
     }
 
-    public void setMouvementCompteId(Long mouvementCompteId) {
-        this.mouvementCompteId = mouvementCompteId;
+    public void setSomme(BigDecimal somme) {
+        this.somme = somme;
     }
 
-    public BigDecimal getMouvementSomme() {
-        return mouvementSomme;
+    public Date getDate() {
+        return date;
     }
 
-    public void setMouvementSomme(BigDecimal mouvementSomme) {
-        this.mouvementSomme = mouvementSomme;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    public Date getMouvementDate() {
-        return mouvementDate;
+    public Long getCompteId() {
+        return compteId;
     }
 
-    public void setMouvementDate(Date mouvementDate) {
-        this.mouvementDate = mouvementDate;
-    }
-
-    public Compte getMouvementCompte() {
-        return mouvementCompte;
-    }
-
-    public void setMouvementCompte(Compte mouvementCompte) {
-        this.mouvementCompte = mouvementCompte;
+    public void setCompteId(Long compteId) {
+        this.compteId = compteId;
     }
 }

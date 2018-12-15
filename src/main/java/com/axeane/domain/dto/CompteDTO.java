@@ -1,57 +1,66 @@
 package com.axeane.domain.dto;
 
-import com.axeane.domain.Client;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.data.annotation.Transient;
 
 import java.math.BigDecimal;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CompteDTO {
-    private Long compteId;
-    private Integer compteNumCompte;
-    private BigDecimal soldeDTO;
+    private Long id;
+    private Integer numCompte;
+    private BigDecimal solde;
     @JsonIgnore
-    private ClientDTO compteClient;
+    private ClientDTO client;
     @JsonIgnore
-    private Long compteClientId;
+    private Long clientId;
+    private List<MouvementDTO> mouvements = new LinkedList<>();
 
-    public Long getCompteId() {
-        return compteId;
+    public Long getId() {
+        return id;
     }
 
-    public void setCompteId(Long compteId) {
-        this.compteId = compteId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Integer getCompteNumCompte() {
-        return compteNumCompte;
+    public Integer getNumCompte() {
+        return numCompte;
     }
 
-    public void setCompteNumCompte(Integer compteNumCompte) {
-        this.compteNumCompte = compteNumCompte;
+    public void setNumCompte(Integer numCompte) {
+        this.numCompte = numCompte;
     }
 
-    public ClientDTO getCompteClient() {
-        return compteClient;
+    public BigDecimal getSolde() {
+        return solde;
     }
 
-    public void setCompteClient(ClientDTO compteClient) {
-        this.compteClient = compteClient;
+    public void setSolde(BigDecimal solde) {
+        this.solde = solde;
     }
 
-    public BigDecimal getSoldeDTO() {
-        return soldeDTO;
+    public ClientDTO getClient() {
+        return client;
     }
 
-    public void setSoldeDTO(BigDecimal soldeDTO) {
-        this.soldeDTO = soldeDTO;
+    public void setClient(ClientDTO client) {
+        this.client = client;
     }
 
-    public Long getCompteClientId() {
-        return compteClientId;
+    public Long getClientId() {
+        return clientId;
     }
 
-    public void setCompteClientId(Long compteClientId) {
-        this.compteClientId = compteClientId;
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
+    }
+
+    public List<MouvementDTO> getMouvements() {
+        return mouvements;
+    }
+
+    public void setMouvements(List<MouvementDTO> mouvements) {
+        this.mouvements = mouvements;
     }
 }

@@ -1,21 +1,14 @@
 package com.axeane.service.business;
 
-import com.axeane.domain.Client;
-import com.axeane.domain.Mouvement;
 import com.axeane.domain.dto.ClientDTO;
 import com.axeane.domain.dto.MouvementDTO;
-import com.axeane.domain.mapper.ClientMapper;
 import com.axeane.models.MouvementModel;
 import com.axeane.service.ClientService;
 import com.axeane.service.MouvementService;
-import com.axeane.web.rest.ClientResource;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import org.mapstruct.factory.Mappers;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
@@ -29,8 +22,6 @@ import java.util.Map;
 
 @Service
 public class ExtraitCompteBancaireService {
-    private final Logger log = LoggerFactory.getLogger(ClientResource.class);
-    private ClientMapper mapper = Mappers.getMapper(ClientMapper.class);
     private final ClientService clientService;
     private final MouvementService mouvementService;
 
@@ -39,7 +30,7 @@ public class ExtraitCompteBancaireService {
         this.mouvementService = mouvementService;
     }
 
-    public ByteArrayInputStream exportextraitBancaireToPdf(Integer numCompte) throws JRException {
+    public ByteArrayInputStream exportextraitBancaireToPdf(Long numCompte) throws JRException {
 
         InputStream inputStream = getClass().getResourceAsStream("/reports/extrait.jrxml");
         JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
@@ -48,27 +39,27 @@ public class ExtraitCompteBancaireService {
 
         ClientDTO client = clientService.getClientBynNumCompte(numCompte);
 
-        List<MouvementDTO> mouvements = mouvementService.findAllMouvementByCompte(numCompte);
-        BigDecimal solde = mouvements.iterator().next().getMouvementCompte().getSolde();
+        List<MouvementDTO> mouvements = mouvementService.findMouvementByCompte(numCompte);
+        BigDecimal solde = mouvements.iterator().next().getSomme();
         List<MouvementModel> mouvementModels = new ArrayList<>();
-        for (MouvementDTO detailsMouvement : mouvementService.findAllMouvementByCompte(numCompte)) {
+        for (MouvementDTO detailsMouvement : mouvementService.findMouvementByCompte(numCompte)) {
             MouvementModel detailsModel = new MouvementModel();
-            detailsModel.setDate(detailsMouvement.getMouvementDate());
-            detailsModel.setSomme(detailsMouvement.getMouvementSomme());
-            detailsModel.setTypeMouvement(detailsMouvement.getMouvementTypeMouvement());
-            BigDecimal resultSolde = BigDecimal.ZERO;
+            detailsModel.setDate(detailsMouvement.getDate());
+            detailsModel.setSomme(detailsMouvement.getSomme());
+            detailsModel.setTypeMouvement(detailsMouvement.getTypeMouvement());
+            BigDecimal resultSolde;
 
-            switch (detailsMouvement.getMouvementTypeMouvement().toString()) {
+            switch (detailsMouvement.getTypeMouvement().toString()) {
                 case "RETRAIT":
-                    resultSolde = solde.subtract(detailsMouvement.getMouvementSomme());
+                    resultSolde = solde.subtract(detailsMouvement.getSomme());
                     solde = resultSolde;
                     break;
                 case "VERSEMENT":
-                    resultSolde = solde.add(detailsMouvement.getMouvementSomme());
+                    resultSolde = solde.add(detailsMouvement.getSomme());
                     solde = resultSolde;
                     break;
                 case "VIREMENT":
-                    resultSolde = solde.add(detailsMouvement.getMouvementSomme());
+                    resultSolde = solde.add(detailsMouvement.getSomme());
                     solde = resultSolde;
                     break;
             }

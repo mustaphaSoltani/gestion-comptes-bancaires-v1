@@ -41,7 +41,7 @@ public class Mouvement implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @NotNull
+//    @NotNull
     @Transient
     @JsonProperty
     private Long compteId;

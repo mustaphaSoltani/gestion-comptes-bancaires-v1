@@ -4,90 +4,79 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ClientDTO {
-    private Long clientId;
-    private String clientCin;
-    private String clientName;
-    private String clientPrenom;
-    private String clientAdresse;
-    private String clientEmail;
-    private String clientNumTel;
+    private Long id;
+    private String cin;
+    private String name;
+    private String prenom;
+    private String adresse;
+    private String email;
+    private String numTel;
     private Set<CompteDTO> comptes = new HashSet<>();
 
     public ClientDTO() {
     }
 
-    public ClientDTO(Long clientId, String clientCin, String clientName, String clientPrenom, String clientAdresse, String clientEmail, String clientNumTel, Set<CompteDTO> comptesClient) {
-        this.clientId = clientId;
-        this.clientCin = clientCin;
-        this.clientName = clientName;
-        this.clientPrenom = clientPrenom;
-        this.clientAdresse = clientAdresse;
-        this.clientEmail = clientEmail;
-        this.clientNumTel = clientNumTel;
-        this.comptes = comptesClient;
+    public Long getId() {
+        return id;
     }
 
-    public Long getClientId() {
-        return clientId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public String getCin() {
+        return cin;
     }
 
-    public String getClientCin() {
-        return clientCin;
+    public void setCin(String cin) {
+        this.cin = cin;
     }
 
-    public void setClientCin(String clientCin) {
-        this.clientCin = clientCin;
+    public String getName() {
+        return name;
     }
 
-    public String getClientName() {
-        return clientName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
+    public String getPrenom() {
+        return prenom;
     }
 
-    public String getClientPrenom() {
-        return clientPrenom;
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
 
-    public void setClientPrenom(String clientPrenom) {
-        this.clientPrenom = clientPrenom;
+    public String getAdresse() {
+        return adresse;
     }
 
-    public String getClientAdresse() {
-        return clientAdresse;
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
     }
 
-    public void setClientAdresse(String clientAdresse) {
-        this.clientAdresse = clientAdresse;
+    public String getEmail() {
+        return email;
     }
 
-    public String getClientEmail() {
-        return clientEmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setClientEmail(String clientEmail) {
-        this.clientEmail = clientEmail;
+    public String getNumTel() {
+        return numTel;
     }
 
-    public String getClientNumTel() {
-        return clientNumTel;
-    }
-
-    public void setClientNumTel(String clientNumTel) {
-        this.clientNumTel = clientNumTel;
+    public void setNumTel(String numTel) {
+        this.numTel = numTel;
     }
 
     public Set<CompteDTO> getComptes() {
         return comptes;
     }
 
-    public void setComptes(Set<CompteDTO> clientComptes) {
-        this.comptes = clientComptes;
+    public void setComptes(Set<CompteDTO> comptes) {
+        this.comptes = comptes;
     }
 }
